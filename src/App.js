@@ -12,7 +12,7 @@ function App() {
         height: "100vh",
       }}
     >
-      <Header />
+      {/* <Header /> */}
       <Layout.Content
         style={{
           backgroundColor: "#efefef",

@@ -1,19 +1,30 @@
 import { Button, Form, Input, Typography, message, Spin } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/pages/login.css";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, login } from "../actions/authActions";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../hooks/auth";
+import { GoogleLogin } from "@react-oauth/google";
+import { signInWithGoogle } from "../services/firebase";
+import firebase from "../services/firebase";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const token = getToken()
+  const token = getToken();
   const { loading, error, isAuthenticated } = useSelector(
     (state) => state.auth
   );
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      setUser(user);
+      console.log(user);
+    });
+  }, []);
   const onFinish = (values) => {
     dispatch(login(values.email, values.password));
   };
@@ -111,6 +122,9 @@ const Login = () => {
           >
             Don't have an account? Sign Up
           </Link>
+        </Form.Item>
+        <Form.Item className="ant-col-16">
+          <Button onClick={signInWithGoogle}>Sign in with google</Button>
         </Form.Item>
       </Form>
     </div>
