@@ -1,0 +1,6 @@
+.auth-layout-container {
+  height: calc(100vh - 80px);
+}
+.auth-layout-right {
+  border: 1px solid;
+}

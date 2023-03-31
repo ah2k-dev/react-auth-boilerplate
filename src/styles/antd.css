@@ -1,0 +1,32 @@
+.ant-input {
+  border-radius: 10px !important;
+  height: 40px !important;
+}
+
+.ant-input :focus {
+  border-color: green !important;
+  outline-color: green !important;
+}
+
+.ant-input :hover {
+  outline-color: green !important;
+  border-color: green !important;
+}
+.ant-btn {
+  border-radius: 10px !important;
+}
+
+.ant-btn:hover {
+  border-color: green !important;
+  color: green !important;
+}
+
+.ant-btn-primary {
+  color: white !important;
+  background-color: green !important;
+}
+
+.ant-btn-primary:hover {
+  color: white !important;
+  /* background-color: green !important; */
+}
