@@ -8,6 +8,7 @@ import AuthRoute from "./protected-routes/AuthRoute.js";
 import InitialLayout from "./components/layout/InitialLayout.js";
 import Auth from "./pages/Auth.js";
 import AuthLayout from "./components/layout/AuthLayout.js";
+import RequstToken from "./pages/RequstToken.js";
 // import * as dotenv from "dotenv";
 // dotenv.config();
 function App() {
@@ -19,6 +20,8 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthLayout />}>
               <Route path="/auth" element={<Auth />} />
+              <Route path="/auth/requestToken" element={<RequstToken />} />
+              <Route path="/auth/forgot-password" element={<RequstToken />} />
             </Route>
           </Route>
           <Route

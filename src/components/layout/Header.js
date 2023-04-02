@@ -9,18 +9,8 @@ const Header = () => {
   const auth = useAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { error } = useSelector((state) => state.auth);
-  useEffect(() => {
-    if (error) {
-      message.error({
-        content: error,
-        style: {
-          marginTop: "10vh",
-        },
-      });
-      dispatch(clearErrors());
-    }
-  }, [error, dispatch]);
+  // const { error } = useSelector((state) => state.auth);
+  
 
   return (
     <Row className="header-container" justify="space-between" align="middle">

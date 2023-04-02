@@ -48,3 +48,14 @@
   width: 20px;
   margin-right: 5px;
 }
+
+
+.verify-email {
+  color: red;
+  text-decoration: underline;
+}
+
+.verify-email:hover {
+  cursor: pointer;
+  color: black;
+}

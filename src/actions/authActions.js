@@ -1,64 +1,112 @@
+import { message } from "antd";
 import { authConstants } from "../constants/authConstants";
-import axios from "axios";
+import custAxios from "../services/axiosConfig";
 
-axios.defaults.baseURL = "http://localhost:8001";
-
-export const login = (email, password) => async (dispatch) => {
+export const signup = (email, password, name) => async (dispatch) => {
+  dispatch({
+    type: authConstants.SIGNUP_REQUEST,
+  });
   try {
-    dispatch({ type: authConstants.LOGIN_REQUEST });
-    const config = { headers: { "Content-Type": "application/json" } };
-    const res = await axios.post("/auth/login", { email, password }, config);
-    dispatch({
-      type: authConstants.LOGIN_SUCCESS,
-      payload: res.data,
+    const res = await custAxios.post("/auth/register", {
+      name,
+      email,
+      password,
     });
-    localStorage.setItem("token", res.data.token);
-  } catch (error) {
-    dispatch({
-      type: authConstants.LOGIN_FAILURE,
-      payload: error.response.data.message,
-    });
-  }
-};
-
-export const signup = (name, email, password) => async (dispatch) => {
-  try {
-    dispatch({ type: authConstants.SIGNUP_REQUEST });
-    const config = { headers: { "Content-Type": "application/json" } };
-    const res = await axios.post(
-      "/auth/register",
-      { name, email, password },
-      config
-    );
     dispatch({
       type: authConstants.SIGNUP_SUCCESS,
       payload: res.data,
     });
+    message.success({
+      content: "Signup Successful",
+      style: {
+        marginTop: "10vh",
+      },
+    });
   } catch (error) {
     dispatch({
       type: authConstants.SIGNUP_FAILURE,
-      payload: error.response.data.message,
+      payload: error.response.data.message || "Server Error",
     });
   }
 };
 
-export const logout = () => async (dispatch) => {
+export const login = (email, password) => async (dispatch) => {
+  dispatch({
+    type: authConstants.LOGIN_REQUEST,
+  });
   try {
-    dispatch({ type: authConstants.LOGOUT_REQUEST });
-    const config = { headers: { "Content-Type": "application/json" } };
-    await axios.get("/auth/logout", config);
-    dispatch({
-      type: authConstants.LOGOUT_SUCCESS,
+    const res = await custAxios.post("/auth/login", {
+      email,
+      password,
     });
-    localStorage.removeItem("token");
+    dispatch({
+      type: authConstants.LOGIN_SUCCESS,
+      payload: res.data,
+    });
+    message.success({
+      content: "Login Successful",
+      style: {
+        marginTop: "10vh",
+      },
+    });
   } catch (error) {
     dispatch({
-      type: authConstants.LOGOUT_FAILURE,
-      payload: error.response.data.message,
+      type: authConstants.LOGIN_FAILURE,
+      payload: error.response.data.message || "Server Error",
     });
   }
 };
 
+export const requestToken = (email) => async (dispatch) => {
+  dispatch({
+    type: authConstants.REQUEST_TOKEN_REQUEST,
+  });
+  try {
+    const res = await custAxios.post("/auth/requestEmailToken", {
+      email,
+    });
+    dispatch({
+      type: authConstants.REQUEST_TOKEN_SUCCESS,
+    });
+    message.success({
+      content: res?.data?.message,
+      style: {
+        marginTop: "10vh",
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: authConstants.REQUEST_TOKEN_FAILURE,
+      payload: error.response.data.message || "Server Error",
+    });
+  }
+};
+
+export const verifyEmail = (token, email) => async (dispatch) => {
+  dispatch({
+    type: authConstants.VERIFY_EMAIL_REQUEST,
+  });
+  try {
+    const res = await custAxios.post("/auth/verifyEmail", {
+      emailVerificationToken: token,
+      email,
+    });
+    dispatch({
+      type: authConstants.VERIFY_EMAIL_SUCCESS,
+    });
+    message.success({
+      content: res?.data?.message,
+      style: {
+        marginTop: "10vh",
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: authConstants.VERIFY_EMAIL_FAILURE,
+      payload: error.response.data.message || "Server Error",
+    });
+  }
+};
 export const clearErrors = () => async (dispatch) => {
   dispatch({
     type: authConstants.CLEAR_ERRORS,
