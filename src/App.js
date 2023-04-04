@@ -9,6 +9,9 @@ import InitialLayout from "./components/layout/InitialLayout.js";
 import Auth from "./pages/Auth.js";
 import AuthLayout from "./components/layout/AuthLayout.js";
 import RequstToken from "./pages/RequstToken.js";
+import DashboardLayout from "./components/layout/DashboardLayout.js";
+import AdminDashboard from "./pages/admin/AdminDashboard.js";
+import UserDashboard from "./pages/user/UserDashboard.js"
 // import * as dotenv from "dotenv";
 // dotenv.config();
 function App() {
@@ -24,10 +27,10 @@ function App() {
               <Route path="/auth/forgot-password" element={<RequstToken />} />
             </Route>
           </Route>
-          <Route
-            path="/dashboard"
-            element={<AuthRoute Component={Dashboard} />}
-          />
+          <Route path="/dashboard" element={<DashboardLayout/>}>
+            <Route path="/dashboard/admin" element={<AdminDashboard />} />
+            <Route path="/dashboard/user" element={<UserDashboard />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>
