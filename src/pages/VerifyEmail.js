@@ -1,35 +1,24 @@
-import { Button, Col, Form, Input, Row, Typography, message } from "antd";
 import React, { useEffect } from "react";
-import BackButton from "../components/BackButton";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, requestToken } from "../actions/authActions";
+import { clearErrors, verifyEmail } from "../actions/authActions";
+import { Button, Col, Form, Input, Row, Typography, message } from "antd";
+import BackButton from "../components/BackButton";
 
-const RequstToken = () => {
-  const { path } = useLocation();
-  const dispatch = useDispatch();
+const VerifyEmail = () => {
   const navigate = useNavigate();
+  const { email } = useParams();
+  const dispatch = useDispatch();
   const { loading, error, isAuthenticated } = useSelector(
     (state) => state.auth
   );
-  const onFinish = async (values) => {
-    console.log(values);
-    let type;
-    if (path === "/auth/requestToken") {
-      type = "request";
-    } else {
-      type = "reset";
-    }
-    const res = await dispatch(requestToken(values.email, type));
+  const onFinish = async(values) => {
+    const res = await dispatch(verifyEmail(values.token, email));
     if (res) {
-      if (type === "request") {
-        navigate("/auth/verifyEmail/" + values.email);
-      } else {
-        navigate("/auth/resetPassword/" + values.email);
-      }
+      console.log(res);
+      navigate("/auth");
     }
   };
-
   useEffect(() => {
     if (error) {
       message.error({
@@ -46,10 +35,17 @@ const RequstToken = () => {
     <div className="auth-container">
       <BackButton />
       <div className="auth-inner">
-        <Typography.Title level={3}>Find your Account</Typography.Title>
+        <Typography.Title level={3}>Verify Email Token</Typography.Title>
         <Typography.Paragraph>
-          Enter your email address and we'll send you a link to get back into
-          your account.
+          Enter the token that has been sent to your email. If you haven't
+          received the email, please check your spam folder.
+        </Typography.Paragraph>
+        <Typography.Paragraph
+          style={{
+            color: "red",
+          }}
+        >
+          Note: The token will expire in 10 minutes.
         </Typography.Paragraph>
         <Row className="auth-form">
           <Form
@@ -63,7 +59,7 @@ const RequstToken = () => {
           >
             <Col span={20}>
               <Form.Item
-                name="email"
+                name="token"
                 rules={[
                   {
                     required: true,
@@ -71,7 +67,7 @@ const RequstToken = () => {
                   },
                 ]}
               >
-                <Input type="email" placeholder="Email" />
+                <Input type="number" placeholder="Token" />
               </Form.Item>
             </Col>
             <Col span={20}>
@@ -82,7 +78,7 @@ const RequstToken = () => {
                   className="activeBtn"
                   loading={loading}
                 >
-                  Send Link
+                  Verify
                 </Button>
               </Form.Item>
             </Col>
@@ -93,4 +89,4 @@ const RequstToken = () => {
   );
 };
 
-export default RequstToken;
+export default VerifyEmail;

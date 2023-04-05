@@ -1,14 +1,21 @@
 import { authConstants } from "../constants/authConstants";
 import { getToken } from "../hooks/auth";
 const token = getToken();
+const userData = JSON.parse(localStorage.getItem("user"));
 export const authReducer = (
-  state = { user: null, isAuthenticated: token ? true : false },
+  state = {
+    user: token && userData ? { jwtToken: token, userData: userData } : null,
+    isAuthenticated: token ? true : false,
+  },
   action
 ) => {
   switch (action.type) {
     case authConstants.LOGIN_REQUEST:
     case authConstants.SIGNUP_REQUEST:
     case authConstants.LOGOUT_REQUEST:
+    case authConstants.REQUEST_TOKEN_REQUEST:
+    case authConstants.VERIFY_EMAIL_REQUEST:
+    case authConstants.RESET_PASSWORD_REQUEST:
       return {
         ...state,
         loading: true,
@@ -29,6 +36,9 @@ export const authReducer = (
     case authConstants.LOGIN_FAILURE:
     case authConstants.SIGNUP_FAILURE:
     case authConstants.LOGOUT_FAILURE:
+    case authConstants.REQUEST_TOKEN_FAILURE:
+    case authConstants.VERIFY_EMAIL_FAILURE:
+    case authConstants.RESET_PASSWORD_FAILURE:
       return {
         ...state,
         loading: false,
@@ -45,6 +55,13 @@ export const authReducer = (
       return {
         ...state,
         error: null,
+      };
+    case authConstants.REQUEST_TOKEN_SUCCESS:
+    case authConstants.VERIFY_EMAIL_SUCCESS:
+    case authConstants.RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
       };
     default:
       return state;

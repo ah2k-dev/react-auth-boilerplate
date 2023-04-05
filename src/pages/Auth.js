@@ -27,7 +27,10 @@ const Auth = () => {
     if (active === "login") {
       dispatch(login(values.email, values.password));
     } else {
-      dispatch(signup(values.name, values.email, values.password));
+      const res = dispatch(signup(values.name, values.email, values.password));
+      if(res){
+        setActive("login")
+      }
     }
   };
   const handleSignUp = () => {
